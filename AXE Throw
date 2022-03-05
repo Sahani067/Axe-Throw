@@ -1,0 +1,86 @@
+using UnityEngine;
+
+public class AxeThrow : MonoBehaviour
+{
+    public Animator anim;
+    public Rigidbody axe;
+    public float throwForce = 50f;
+    public Transform target, curve_point;
+    private bool isReturning = false;
+    public Vector3 old_Pos;
+    private float time = 0.0f;
+    void Update()
+    {
+        //
+        if (Input.GetButtonDown("Fire1"))
+        {
+            anim.SetBool("throw", true);
+            
+        }
+        if(Input.GetButtonUp("Fire1"))
+        {
+            anim.SetBool("throw", false);
+        }
+        //
+        //--------//
+        //
+        if (Input.GetButtonDown("Fire2"))
+        {
+            anim.SetBool("rec", true);
+        }
+        if(Input.GetButtonUp("Fire2"))
+        {
+            anim.SetBool("rec", false);
+
+        }
+        //
+        if (isReturning)
+        {
+            if (time < 1.015f)
+            {
+                axe.position = getBQCPoint(time, old_Pos, curve_point.position, target.position);
+                time += Time.deltaTime;
+                axe.rotation = Quaternion.Slerp(axe.transform.rotation, target.rotation, 50 * Time.deltaTime);
+            }
+            else
+            {
+                ResetAxe();
+            }
+        }
+        //
+    }
+    void throwAxe()
+    {
+        isReturning = false;
+        axe.transform.parent = null;
+        axe.isKinematic = false;
+        axe.AddForce(transform.TransformDirection(Vector3.forward) * throwForce, ForceMode.Impulse);
+        axe.AddTorque(axe.transform.TransformDirection(Vector3.right) * 100, ForceMode.Impulse);
+
+    }
+    void ReturnAxe()
+    {
+        time = 0f;
+        isReturning = true;
+        axe.velocity = Vector3.zero;
+        old_Pos = axe.position;
+        axe.isKinematic = true;
+    }
+
+    Vector3 getBQCPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2)
+    {
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+        Vector3 p = (uu * p0) + (2 * u * t * p1) + (tt * p2);
+        return p;
+    }
+
+    void ResetAxe()
+    {
+        isReturning = false;
+        axe.position = target.transform.position;
+        axe.rotation = target.transform.rotation;
+        axe.transform.parent = target;
+    }
+}
