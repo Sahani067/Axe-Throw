@@ -4,7 +4,7 @@ public class AxeThrow : MonoBehaviour
 {
     public Animator anim;
     public Rigidbody axe;
-    public float throwForce = 50f;
+    public float throwingForce = 100f;
     public Transform target, curve_point;
     private bool isReturning = false;
     public Vector3 old_Pos;
@@ -17,30 +17,19 @@ public class AxeThrow : MonoBehaviour
             anim.SetBool("throw", true);
             
         }
-        if(Input.GetButtonUp("Fire1"))
+        else
         {
             anim.SetBool("throw", false);
         }
         //
-        //--------//
-        //
-        if (Input.GetButtonDown("Fire2"))
-        {
-            anim.SetBool("rec", true);
-        }
-        if(Input.GetButtonUp("Fire2"))
-        {
-            anim.SetBool("rec", false);
-
-        }
-        //
+        
         if (isReturning)
         {
-            if (time < 1.015f)
+            if (time < 1f)
             {
                 axe.position = getBQCPoint(time, old_Pos, curve_point.position, target.position);
                 time += Time.deltaTime;
-                axe.rotation = Quaternion.Slerp(axe.transform.rotation, target.rotation, 50 * Time.deltaTime);
+                axe.rotation = Quaternion.Slerp(axe.transform.rotation, target.rotation , 100 * Time.deltaTime);
             }
             else
             {
@@ -54,8 +43,9 @@ public class AxeThrow : MonoBehaviour
         isReturning = false;
         axe.transform.parent = null;
         axe.isKinematic = false;
-        axe.AddForce(transform.TransformDirection(Vector3.forward) * throwForce, ForceMode.Impulse);
-        axe.AddTorque(axe.transform.TransformDirection(Vector3.right) * 100, ForceMode.Impulse);
+        axe.AddForce(transform.TransformDirection(Vector3.forward) * throwingForce, ForceMode.Impulse);
+        axe.AddTorque(axe.transform.TransformDirection(Vector3.right) * 10000, ForceMode.Acceleration);
+
 
     }
     void ReturnAxe()
