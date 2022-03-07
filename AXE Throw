@@ -44,7 +44,7 @@ public class AxeThrow : MonoBehaviour
         axe.transform.parent = null;
         axe.isKinematic = false;
         axe.AddForce(transform.TransformDirection(Vector3.forward) * throwingForce, ForceMode.Impulse);
-        axe.AddTorque(axe.transform.TransformDirection(Vector3.right) * 10000, ForceMode.Acceleration);
+        axe.AddTorque(axe.transform.TransformDirection(Vector3.right) * 100, ForceMode.Acceleration);
 
 
     }
