@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AxeThrow : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public Animator anim;
     public Rigidbody axe;
@@ -9,27 +9,34 @@ public class AxeThrow : MonoBehaviour
     private bool isReturning = false;
     public Vector3 old_Pos;
     private float time = 0.0f;
-    void Update()
+
+
+
+    private void Update()
     {
         //
         if (Input.GetButtonDown("Fire1"))
         {
             anim.SetBool("throw", true);
-            
+
         }
         else
         {
             anim.SetBool("throw", false);
         }
         //
-        
+    }
+
+
+    void FixedUpdate()
+    {
         if (isReturning)
         {
             if (time < 1f)
             {
                 axe.position = getBQCPoint(time, old_Pos, curve_point.position, target.position);
                 time += Time.deltaTime;
-                axe.rotation = Quaternion.Slerp(axe.transform.rotation, target.rotation , 100 * Time.deltaTime);
+                axe.rotation = Quaternion.Slerp(axe.transform.rotation, target.rotation, 700);
             }
             else
             {
@@ -44,8 +51,7 @@ public class AxeThrow : MonoBehaviour
         axe.transform.parent = null;
         axe.isKinematic = false;
         axe.AddForce(transform.TransformDirection(Vector3.forward) * throwingForce, ForceMode.Impulse);
-        axe.AddTorque(axe.transform.TransformDirection(Vector3.right) * 100, ForceMode.Acceleration);
-
+        axe.AddTorque(axe.transform.TransformDirection(Vector3.right) * 500, ForceMode.Acceleration);
 
     }
     void ReturnAxe()
