@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Axe : MonoBehaviour
 {
     public Animator anim;
     public Rigidbody axe;
@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
             {
                 axe.position = getBQCPoint(time, old_Pos, curve_point.position, target.position);
                 time += Time.deltaTime;
-                axe.rotation = Quaternion.Slerp(axe.transform.rotation, target.rotation, 700);
+                axe.rotation = Quaternion.Slerp(axe.transform.rotation, target.rotation, 10000 * Time.deltaTime);
             }
             else
             {
